@@ -1,0 +1,33 @@
+
+=== 0. PrintTreeVisitor (third visitor, added without changing File/Directory) ===
++ project/
+    + docs/
+        - report.pdf (1.2 MB)
+        - notes.txt (4.0 KB)
+        - thesis.docx (341.8 KB)
+    + src/
+        - Main.java (3.1 KB)
+        - Utils.java (1.8 KB)
+        + test/
+            - AppTest.java (2.3 KB)
+    + images/
+        - logo.png (240.0 KB)
+        - banner.png (1.0 MB)
+    + tmp/
+    - README.md (1.0 KB)
+
+=== 1. SizeCalculatorVisitor ===
+Total size of 'project': 2915197 B (2.8 MB)
+
+=== 2. SearchVisitor ===
+Search by extension .java:
+  project/src/Main.java
+  project/src/Utils.java
+  project/src/test/AppTest.java
+Search by size > 1000000 B:
+  project/docs/report.pdf
+  project/images/banner.png
+Search by name contains "report":
+  project/docs/report.pdf
+Search by extension .exe:
+  (nothing found)

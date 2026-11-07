@@ -1,0 +1,79 @@
+digraph UML {
+  graph [rankdir=BT, nodesep=0.55, ranksep=0.9, fontname="Helvetica", bgcolor="white", pad=0.3];
+  node  [shape=plain, fontname="Helvetica", fontsize=11];
+  edge  [fontname="Helvetica", fontsize=10];
+
+  FileSystemElement [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB">
+      <TR><TD><I>&laquo;interface&raquo;</I><BR/><B><I>FileSystemElement</I></B></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">+ getName(): String<BR ALIGN="LEFT"/>+ accept(visitor: FileSystemVisitor): void<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  File [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB">
+      <TR><TD><B>File</B></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">- name: String<BR ALIGN="LEFT"/>- sizeInBytes: long<BR ALIGN="LEFT"/></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">+ getName(): String<BR ALIGN="LEFT"/>+ getSizeInBytes(): long<BR ALIGN="LEFT"/>+ getExtension(): String<BR ALIGN="LEFT"/>+ accept(visitor: FileSystemVisitor): void<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  Directory [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#EAF2FB">
+      <TR><TD><B>Directory</B></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">- name: String<BR ALIGN="LEFT"/>- children: List&lt;FileSystemElement&gt;<BR ALIGN="LEFT"/></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">+ add(child: FileSystemElement): Directory<BR ALIGN="LEFT"/>+ getChildren(): List&lt;FileSystemElement&gt;<BR ALIGN="LEFT"/>+ getName(): String<BR ALIGN="LEFT"/>+ accept(visitor: FileSystemVisitor): void<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  FileSystemVisitor [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FDF1E3">
+      <TR><TD><I>&laquo;interface&raquo;</I><BR/><B><I>FileSystemVisitor</I></B></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">+ visitFile(file: File): void<BR ALIGN="LEFT"/>+ visitDirectory(directory: Directory): void<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  SizeCalculatorVisitor [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FDF1E3">
+      <TR><TD><B>SizeCalculatorVisitor</B></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">- totalSizeInBytes: long<BR ALIGN="LEFT"/></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">+ visitFile(file: File): void<BR ALIGN="LEFT"/>+ visitDirectory(directory: Directory): void<BR ALIGN="LEFT"/>+ getTotalSizeInBytes(): long<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  SearchVisitor [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FDF1E3">
+      <TR><TD><B>SearchVisitor</B></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">- criterion: Predicate&lt;File&gt;<BR ALIGN="LEFT"/>- currentPath: Deque&lt;String&gt;<BR ALIGN="LEFT"/>- matches: List&lt;String&gt;<BR ALIGN="LEFT"/></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">+ visitFile(file: File): void<BR ALIGN="LEFT"/>+ visitDirectory(directory: Directory): void<BR ALIGN="LEFT"/>+ getMatches(): List&lt;String&gt;<BR ALIGN="LEFT"/>+ byExtension(ext: String): SearchVisitor {static}<BR ALIGN="LEFT"/>+ largerThan(bytes: long): SearchVisitor {static}<BR ALIGN="LEFT"/>+ nameContains(text: String): SearchVisitor {static}<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  PrintTreeVisitor [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4" BGCOLOR="#FDF1E3">
+      <TR><TD><B>PrintTreeVisitor</B></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">- tree: StringBuilder<BR ALIGN="LEFT"/>- depth: int<BR ALIGN="LEFT"/></TD></TR>
+      <HR/>
+      <TR><TD ALIGN="LEFT">+ visitFile(file: File): void<BR ALIGN="LEFT"/>+ visitDirectory(directory: Directory): void<BR ALIGN="LEFT"/>+ getTree(): String<BR ALIGN="LEFT"/></TD></TR>
+    </TABLE>>];
+
+  // realization (dashed, hollow triangle)
+  File -> FileSystemElement [style=dashed, arrowhead=empty];
+  Directory -> FileSystemElement [style=dashed, arrowhead=empty];
+  SizeCalculatorVisitor -> FileSystemVisitor [style=dashed, arrowhead=empty];
+  SearchVisitor -> FileSystemVisitor [style=dashed, arrowhead=empty];
+  PrintTreeVisitor -> FileSystemVisitor [style=dashed, arrowhead=empty];
+
+  // aggregation: Directory has 0..* children (hollow diamond at Directory)
+  Directory:ne -> FileSystemElement:e [arrowhead=vee, arrowtail=odiamond, dir=both, headlabel="0..*", labeldistance=1.6, label=" children", constraint=false];
+
+  // dependencies
+  FileSystemElement -> FileSystemVisitor [style=dashed, arrowhead=vee, label=" uses", constraint=false];
+  FileSystemVisitor -> File [style=dashed, arrowhead=vee, constraint=false];
+  FileSystemVisitor -> Directory [style=dashed, arrowhead=vee, constraint=false];
+}

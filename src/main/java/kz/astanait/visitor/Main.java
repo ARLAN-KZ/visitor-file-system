@@ -3,6 +3,7 @@ package kz.astanait.visitor;
 import kz.astanait.visitor.element.Directory;
 import kz.astanait.visitor.element.File;
 import kz.astanait.visitor.util.SizeFormatter;
+import kz.astanait.visitor.visitor.PrintTreeVisitor;
 import kz.astanait.visitor.visitor.SearchVisitor;
 import kz.astanait.visitor.visitor.SizeCalculatorVisitor;
 
@@ -17,6 +18,11 @@ public final class Main {
 
     public static void main(String[] args) {
         Directory root = buildSampleFileSystem();
+
+        printHeader("0. PrintTreeVisitor (third visitor, added without changing File/Directory)");
+        PrintTreeVisitor printer = new PrintTreeVisitor();
+        root.accept(printer);
+        System.out.print(printer.getTree());
 
         printHeader("1. SizeCalculatorVisitor");
         SizeCalculatorVisitor totalSize = new SizeCalculatorVisitor();

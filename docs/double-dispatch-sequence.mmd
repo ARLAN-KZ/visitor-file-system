@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant C as Client (Main)
+    participant D as Directory root
+    participant V as SizeCalculatorVisitor
+    participant F as File report.pdf
+    C->>D: accept(visitor)
+    Note over D: step 1 - runtime type of the ELEMENT selects Directory.accept
+    D->>V: visitDirectory(this)
+    Note over V: step 2 - runtime type of the VISITOR selects its visitDirectory
+    loop each child
+        V->>F: accept(this)
+        F->>V: visitFile(this)
+        V-->>V: totalSizeInBytes += file.getSizeInBytes()
+    end
+    C->>V: getTotalSizeInBytes()

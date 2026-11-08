@@ -2,9 +2,7 @@ package kz.astanait.visitor.util;
 
 import java.util.Locale;
 
-/** Converts a byte count into a short human-readable string (e.g. "1.2 MB"). */
 public final class SizeFormatter {
-
     private static final String[] UNITS = {"B", "KB", "MB", "GB", "TB"};
     private static final int STEP = 1024;
 

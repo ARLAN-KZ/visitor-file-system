@@ -13,17 +13,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-/**
- * Concrete visitor #2. Single responsibility: collect the paths of all files
- * that satisfy a search criterion.
- *
- * <p>The criterion is injected as a {@link Predicate}, so the visitor itself
- * never changes when a new kind of search is needed. The visitor also keeps
- * track of the directory path it is currently in - state that belongs to the
- * OPERATION, not to the elements.
- */
 public final class SearchVisitor implements FileSystemVisitor {
-
     private static final String SEPARATOR = "/";
 
     private final String description;
@@ -36,20 +26,17 @@ public final class SearchVisitor implements FileSystemVisitor {
         this.criterion = Objects.requireNonNull(criterion, "criterion must not be null");
     }
 
-    /** Criterion: files with the given extension (case-insensitive, without dot). */
     public static SearchVisitor byExtension(String extension) {
         String wanted = extension.toLowerCase(Locale.ROOT);
         return new SearchVisitor("extension ." + wanted,
                 file -> file.getExtension().toLowerCase(Locale.ROOT).equals(wanted));
     }
 
-    /** Criterion: files strictly larger than the given number of bytes. */
     public static SearchVisitor largerThan(long sizeInBytes) {
         return new SearchVisitor("size > " + sizeInBytes + " B",
                 file -> file.getSizeInBytes() > sizeInBytes);
     }
 
-    /** Criterion: files whose name contains the text (case-insensitive). */
     public static SearchVisitor nameContains(String text) {
         String wanted = text.toLowerCase(Locale.ROOT);
         return new SearchVisitor("name contains \"" + text + "\"",
@@ -76,7 +63,6 @@ public final class SearchVisitor implements FileSystemVisitor {
         return description;
     }
 
-    /** @return full paths (e.g. "project/src/Main.java") of all matching files, in visit order. */
     public List<String> getMatches() {
         return Collections.unmodifiableList(matches);
     }

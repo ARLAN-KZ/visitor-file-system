@@ -5,15 +5,7 @@ import kz.astanait.visitor.element.File;
 import kz.astanait.visitor.element.FileSystemElement;
 import kz.astanait.visitor.util.SizeFormatter;
 
-/**
- * Concrete visitor #3 - added AFTER File and Directory were finished, without
- * touching either of them. This is the proof of the Open/Closed Principle:
- * a brand-new operation is just a new class.
- *
- * <p>Single responsibility: render the visited structure as an indented tree.
- */
 public final class PrintTreeVisitor implements FileSystemVisitor {
-
     private static final String INDENT = "    ";
     private static final String NEW_LINE = System.lineSeparator();
 
@@ -35,7 +27,6 @@ public final class PrintTreeVisitor implements FileSystemVisitor {
         depth--;
     }
 
-    /** @return the rendered tree, one element per line. */
     public String getTree() {
         return tree.toString();
     }

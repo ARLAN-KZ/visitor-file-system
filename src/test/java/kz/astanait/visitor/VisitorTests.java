@@ -10,13 +10,7 @@ import kz.astanait.visitor.visitor.SizeCalculatorVisitor;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Dependency-free test runner (no JUnit needed, so the project compiles with
- * plain javac). Run: java -cp out kz.astanait.visitor.VisitorTests
- * Exit code is 0 when all tests pass and 1 otherwise.
- */
 public final class VisitorTests {
-
     private static int passed;
     private static int failed;
 
@@ -44,8 +38,6 @@ public final class VisitorTests {
         }
     }
 
-    // ---------- double dispatch ----------
-
     private static void fileDispatchesToVisitFile() {
         RecordingVisitor visitor = new RecordingVisitor();
         new File("a.txt", 1).accept(visitor);
@@ -57,8 +49,6 @@ public final class VisitorTests {
         new Directory("d").accept(visitor);
         assertEquals(List.of("dir:d"), visitor.calls);
     }
-
-    // ---------- SizeCalculatorVisitor ----------
 
     private static void sizeOfSingleFile() {
         SizeCalculatorVisitor visitor = new SizeCalculatorVisitor();
@@ -77,8 +67,6 @@ public final class VisitorTests {
         new Directory("empty").accept(visitor);
         assertEquals(0L, visitor.getTotalSizeInBytes());
     }
-
-    // ---------- SearchVisitor ----------
 
     private static void searchByExtension() {
         SearchVisitor visitor = SearchVisitor.byExtension("java");
@@ -110,8 +98,6 @@ public final class VisitorTests {
         assertEquals(List.of("d/zero"), visitor.getMatches());
     }
 
-    // ---------- several visitors, one structure ----------
-
     private static void twoVisitorsOnSameStructure() {
         Directory tree = sampleTree();
         SizeCalculatorVisitor size = new SizeCalculatorVisitor();
@@ -128,8 +114,6 @@ public final class VisitorTests {
         String nl = System.lineSeparator();
         assertEquals("+ root/" + nl + "    + sub/" + nl + "        - f.txt (10 B)" + nl, visitor.getTree());
     }
-
-    // ---------- elements ----------
 
     private static void fileExtension() {
         assertEquals("pdf", new File("report.pdf", 1).getExtension());
@@ -153,17 +137,6 @@ public final class VisitorTests {
         assertThrows(() -> directory.getChildren().add(new File("hack", 1)));
     }
 
-    // ---------- helpers ----------
-
-    /**
-     * root
-     * +-- data.bin (1000)
-     * +-- src
-     *     +-- A.java (200)
-     *     +-- inner
-     *         +-- B.java (30)
-     * +-- notes.txt (4)
-     */
     private static Directory sampleTree() {
         Directory inner = new Directory("inner").add(new File("B.java", 30));
         Directory src = new Directory("src").add(new File("A.java", 200)).add(inner);
@@ -173,7 +146,6 @@ public final class VisitorTests {
                 .add(new File("notes.txt", 4));
     }
 
-    /** Records which visitX() method was called - used to verify double dispatch. */
     private static final class RecordingVisitor implements FileSystemVisitor {
         private final List<String> calls = new ArrayList<>();
 

@@ -4,14 +4,7 @@ import kz.astanait.visitor.visitor.FileSystemVisitor;
 
 import java.util.Objects;
 
-/**
- * Concrete element: a leaf of the file system tree.
- *
- * <p>The class is immutable and contains NO operation logic (no size
- * calculation, no searching, no printing). All of that lives in visitors.
- */
 public final class File implements FileSystemElement {
-
     private final String name;
     private final long sizeInBytes;
 
@@ -32,16 +25,11 @@ public final class File implements FileSystemElement {
         return sizeInBytes;
     }
 
-    /**
-     * @return the extension without the dot (for "report.pdf" -> "pdf"),
-     *         or an empty string when the name has no extension.
-     */
     public String getExtension() {
         int dotIndex = name.lastIndexOf('.');
         return (dotIndex < 0 || dotIndex == name.length() - 1) ? "" : name.substring(dotIndex + 1);
     }
 
-    /** Double dispatch, step 1: the element picks visitFile(...) and passes itself. */
     @Override
     public void accept(FileSystemVisitor visitor) {
         visitor.visitFile(this);

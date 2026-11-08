@@ -7,12 +7,7 @@ import kz.astanait.visitor.visitor.PrintTreeVisitor;
 import kz.astanait.visitor.visitor.SearchVisitor;
 import kz.astanait.visitor.visitor.SizeCalculatorVisitor;
 
-/**
- * Client code: builds one file system tree and runs several different
- * visitors over the SAME structure.
- */
 public final class Main {
-
     private Main() {
     }
 
